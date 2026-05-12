@@ -90,6 +90,7 @@ def get_embedding_result(image):
     faces = DeepFace.extract_faces(
     img_path=image,
     enforce_detection=True,
+    detector_backend="opencv",
     align=True
 )
 
