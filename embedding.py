@@ -90,7 +90,7 @@ def get_embedding_result(image):
     faces = DeepFace.extract_faces(
     img_path=image,
     enforce_detection=True,
-    detector_backend="retinaface",
+    detector_backend="opencv",
     align=True
 )
 
@@ -111,7 +111,7 @@ def get_embedding_result(image):
         model_name="ArcFace",
         model=ARC_FACE_MODEL,
         enforce_detection=True,
-        detector_backend="retinaface",
+        detector_backend="opencv",
         align=True
     )
 
