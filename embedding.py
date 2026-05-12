@@ -10,10 +10,10 @@ ARC_FACE_MODEL = DeepFace.build_model("ArcFace")
 
 
 
-MIN_DETECTION_CONFIDENCE = 0.6
+MIN_DETECTION_CONFIDENCE = 0.4
 MIN_FACE_AREA_RATIO = 0.008
 MAX_FACE_AREA_RATIO = 0.8
-MIN_SHARPNESS = 8
+MIN_SHARPNESS = 5
 MIN_BRIGHTNESS_SCORE = 0.12
 
 
@@ -73,8 +73,8 @@ def validate_metrics(metrics):
     if metrics["sharpness"] < MIN_SHARPNESS:
         raise ValueError("Image too blurry")
 
-    if metrics["brightness_score"] < MIN_BRIGHTNESS_SCORE:
-        raise ValueError("Poor lighting")
+    # if metrics["brightness_score"] < MIN_BRIGHTNESS_SCORE:
+    #     raise ValueError("Poor lighting")
 
 
 # -------------------------------
@@ -90,7 +90,7 @@ def get_embedding_result(image):
     faces = DeepFace.extract_faces(
     img_path=image,
     enforce_detection=True,
-    detector_backend="opencv",
+    detector_backend="retinaface",
     align=True
 )
 
@@ -111,6 +111,7 @@ def get_embedding_result(image):
         model_name="ArcFace",
         model=ARC_FACE_MODEL,
         enforce_detection=True,
+        detector_backend="retinaface",
         align=True
     )
 
