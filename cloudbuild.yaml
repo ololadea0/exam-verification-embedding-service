@@ -1,0 +1,48 @@
+steps:
+  # Build the Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "gcr.io/$PROJECT_ID/facial-recognition-service:$COMMIT_SHA"
+      - "-t"
+      - "gcr.io/$PROJECT_ID/facial-recognition-service:latest"
+      - "."
+    dir: "py-facial-rec"
+
+  # Push the Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "gcr.io/$PROJECT_ID/facial-recognition-service:$COMMIT_SHA"
+    dir: "py-facial-rec"
+
+  # Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "facial-recognition-service"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/facial-recognition-service:$COMMIT_SHA"
+      - "--region"
+      - "us-central1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+      - "--port"
+      - "8080"
+      - "--memory"
+      - "2Gi"
+      - "--cpu"
+      - "1"
+      - "--max-instances"
+      - "10"
+      - "--set-env-vars"
+      - "MONGO_URI=${_MONGO_URI}"
+    substitutions:
+      _MONGO_URI: ""
+
+options:
+  logging: CLOUD_LOGGING_ONLY
