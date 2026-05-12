@@ -10,3 +10,9 @@ __pycache__/
 *.jpg
 *.png
 *.jpeg
+
+__pycache__/
+*.pyc
+.idea/
+.env
+*.jpg
